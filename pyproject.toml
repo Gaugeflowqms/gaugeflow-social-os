@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gaugeflow-social-os"
+version = "0.1.0"
+description = "GaugeFlow Social OS planning and execution toolkit"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "GaugeFlow CTO Agent" }]
+dependencies = []
+
+[project.scripts]
+gaugeflow-social-os = "gaugeflow_social_os.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

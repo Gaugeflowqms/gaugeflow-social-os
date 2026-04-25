@@ -1,0 +1,7 @@
+id,title,owner_id,effort_points,impact,urgency,confidence,dependencies
+GF-17-01,Trust graph schema and API,M-01,5,9,8,7,
+GF-17-02,Creator onboarding funnel,M-02,5,8,9,8,
+GF-17-03,Social dashboard v1,M-03,8,9,7,6,GF-17-01
+GF-17-04,Referral growth loops,M-04,8,8,8,7,GF-17-02
+GF-17-05,Community moderation protocol,M-02,3,7,8,9,GF-17-01
+GF-17-06,Ops health instrumentation,M-01,5,7,7,8,

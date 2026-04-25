@@ -1,0 +1,32 @@
+{
+  "planned": [
+    {
+      "ritual_slot_id": "R-01",
+      "initiative_id": "GF-17-02",
+      "owner_id": "M-02",
+      "allocated_points": 5
+    },
+    {
+      "ritual_slot_id": "R-02",
+      "initiative_id": "GF-17-01",
+      "owner_id": "M-01",
+      "allocated_points": 5
+    },
+    {
+      "ritual_slot_id": "R-02",
+      "initiative_id": "GF-17-06",
+      "owner_id": "M-01",
+      "allocated_points": 5
+    },
+    {
+      "ritual_slot_id": "R-03",
+      "initiative_id": "GF-17-04",
+      "owner_id": "M-04",
+      "allocated_points": 8
+    }
+  ],
+  "unplanned_initiatives": [
+    "GF-17-05",
+    "GF-17-03"
+  ]
+}
