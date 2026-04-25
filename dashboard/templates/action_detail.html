@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<p><a href="/actions">&larr; back to actions</a></p>
+<h2>Action #{{ a.id }}
+  <span class="badge {{ a.status }}">{{ a.status }}</span>
+</h2>
+
+<div class="grid">
+  <div class="card">
+    <dl>
+      <dt>Platform</dt><dd>{{ a.platform }}</dd>
+      <dt>Type</dt><dd>{{ a.action_type }}</dd>
+      <dt>Created</dt><dd>{{ a.created_at }}</dd>
+      <dt>Mode at creation</dt><dd>{{ a.mode }}</dd>
+      <dt>Topic</dt><dd>{{ a.topic or '—' }}</dd>
+      <dt>Target</dt>
+      <dd>
+        {{ a.target_name or '—' }}
+        {% if a.target_url %}<br><a href="{{ a.target_url }}" target="_blank">{{ a.target_url }}</a>{% endif %}
+      </dd>
+      <dt>Risk score</dt><dd>{{ '%.0f' | format(a.risk_score) }} / 100</dd>
+      <dt>Safety decision</dt><dd>{{ a.safety_decision }}</dd>
+      <dt>Safety reason</dt><dd class="muted">{{ a.safety_reason }}</dd>
+      {% if a.result_url %}
+        <dt>Result URL</dt>
+        <dd><a href="{{ a.result_url }}" target="_blank">{{ a.result_url }}</a></dd>
+      {% endif %}
+      {% if a.error %}
+        <dt>Error</dt><dd class="bad">{{ a.error }}</dd>
+      {% endif %}
+      {% if a.screenshot_path %}
+        <dt>Screenshot</dt><dd class="muted small">{{ a.screenshot_path }}</dd>
+      {% endif %}
+    </dl>
+  </div>
+  <div class="card">
+    <h3>Content</h3>
+    <pre class="content-box">{{ a.text }}</pre>
+
+    {% if a.status in ['draft','queued','failed'] %}
+    <form method="post" action="/actions/{{ a.id }}/approve" class="inline">
+      <button class="primary">Approve and post</button>
+    </form>
+    <form method="post" action="/actions/{{ a.id }}/block" class="inline">
+      <button class="danger">Block</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

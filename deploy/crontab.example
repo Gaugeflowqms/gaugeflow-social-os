@@ -1,0 +1,5 @@
+# GaugeFlow Social OS — daily run
+# Edit your crontab with: crontab -e
+# Example: run once a day at 08:30 local time
+
+30 8 * * * cd /home/sam/gaugeflow-social-os && /home/sam/gaugeflow-social-os/.venv/bin/python main.py run-once >> storage/logs/cron.log 2>&1

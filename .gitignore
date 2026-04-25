@@ -1,0 +1,15 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+storage/actions.db
+storage/logs/*
+storage/screenshots/*
+storage/exports/*
+!storage/logs/.keep
+!storage/screenshots/.keep
+!storage/exports/.keep
+.pytest_cache/
+.DS_Store
