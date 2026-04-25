@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import re
+from difflib import SequenceMatcher
 from dataclasses import dataclass, asdict
 from typing import Dict, Iterable, List, Optional, Tuple
 
@@ -17,7 +18,7 @@ log = logging.getLogger(__name__)
 # --- Hard-block phrases (any match -> blocked) ---
 HARD_BLOCK_PATTERNS: Tuple[str, ...] = (
     # Politics & religion
-    r"\b(democrat|republican|gop|liberal|conservative|maga|biden|trump|obama)\b",
+    r"\b(democrat|democrats|republican|republicans|gop|liberal|conservative|maga|biden|trump|obama)\b",
     r"\b(abortion|pro[- ]?life|pro[- ]?choice|gun control|second amendment)\b",
     r"\b(jesus|christ|allah|muhammad|bible|quran|torah|atheist|believer)\b",
     # Medical / legal / financial advice  (stem-style: leave trailing chars open)
@@ -262,7 +263,7 @@ def check_action(
     )
 
 
-def is_duplicate(new_text: str, existing_texts: Iterable[str], threshold: float = 0.85) -> bool:
+def is_duplicate(new_text: str, existing_texts: Iterable[str], threshold: float = 0.8) -> bool:
     """Cheap shingle-based similarity. No external deps."""
     n = _normalize(new_text)
     if not n:
@@ -285,6 +286,9 @@ def is_duplicate(new_text: str, existing_texts: Iterable[str], threshold: float 
             continue
         sim = inter / union
         if sim >= threshold:
+            return True
+        # Fallback for near-identical phrasing with small suffix/prefix edits.
+        if SequenceMatcher(a=n, b=p).ratio() >= 0.9:
             return True
     return False
 
