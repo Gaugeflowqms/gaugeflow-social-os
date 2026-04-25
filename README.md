@@ -166,6 +166,18 @@ Same as the scheduler firing once. Respects the current mode.
 
 ---
 
+## Check Meta connectivity safely
+
+```bash
+python main.py test-meta
+```
+
+This command is non-destructive. It validates Meta credential presence and
+runs read-only connector checks. If credentials are missing, it prints:
+`Meta credentials missing or incomplete`.
+
+---
+
 ## Start the dashboard
 
 ```bash

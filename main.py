@@ -8,6 +8,7 @@ Usage:
     python main.py dashboard
     python main.py telegram
     python main.py status
+    python main.py test-meta
 """
 from __future__ import annotations
 
@@ -84,6 +85,42 @@ def cmd_status(_args) -> int:
     return 0
 
 
+def cmd_test_meta(_args) -> int:
+    """Run non-destructive Meta connector checks."""
+    from connectors.facebook_page_api import fetch_recent_page_posts
+    from connectors.instagram_graph_api import fetch_recent_media
+
+    fb_ready = CONFIG.has_facebook()
+    ig_ready = CONFIG.has_instagram()
+
+    if not fb_ready or not ig_ready:
+        print("Meta credentials missing or incomplete")
+        print(
+            json.dumps(
+                {
+                    "facebook_configured": fb_ready,
+                    "instagram_configured": ig_ready,
+                },
+                indent=2,
+            )
+        )
+        return 0
+
+    facebook_check = fetch_recent_page_posts(limit=1)
+    instagram_check = fetch_recent_media(limit=1)
+
+    summary = {
+        "facebook_configured": fb_ready,
+        "instagram_configured": ig_ready,
+        "facebook_check_success": bool(facebook_check.get("success")),
+        "instagram_check_success": bool(instagram_check.get("success")),
+        "facebook_error": facebook_check.get("error", ""),
+        "instagram_error": instagram_check.get("error", ""),
+    }
+    print(json.dumps(summary, indent=2))
+    return 0
+
+
 COMMANDS = {
     "init-db": cmd_init_db,
     "dry-run": cmd_dry_run,
@@ -92,6 +129,7 @@ COMMANDS = {
     "dashboard": cmd_dashboard,
     "telegram": cmd_telegram,
     "status": cmd_status,
+    "test-meta": cmd_test_meta,
 }
 
 
