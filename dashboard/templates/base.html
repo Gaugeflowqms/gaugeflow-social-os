@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}GaugeFlow Social OS{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <a href="/">GaugeFlow Social OS</a>
+    </div>
+    <nav>
+      <a href="/">Today</a>
+      <a href="/actions">All actions</a>
+      <a href="/actions?status=draft">Drafts</a>
+      <a href="/actions?status=human_required">Human required</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <small>GaugeFlow QMS — internal social automation</small>
+  </footer>
+</body>
+</html>

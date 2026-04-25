@@ -1,0 +1,18 @@
+[Unit]
+Description=GaugeFlow Social OS — Daily Scheduler
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sam
+WorkingDirectory=/home/sam/gaugeflow-social-os
+EnvironmentFile=/home/sam/gaugeflow-social-os/.env
+ExecStart=/home/sam/gaugeflow-social-os/.venv/bin/python main.py scheduler
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/home/sam/gaugeflow-social-os/storage/logs/scheduler.log
+StandardError=append:/home/sam/gaugeflow-social-os/storage/logs/scheduler.log
+
+[Install]
+WantedBy=multi-user.target

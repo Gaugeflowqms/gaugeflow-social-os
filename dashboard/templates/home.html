@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="status">
+  <div class="card">
+    <h2>Mode</h2>
+    <p class="big">{{ mode }}{% if paused %} <span class="badge bad">paused</span>{% endif %}</p>
+    <form method="post" action="/mode/DRY_RUN" class="inline"><button>DRY_RUN</button></form>
+    <form method="post" action="/mode/SEMI_AUTO" class="inline"><button>SEMI_AUTO</button></form>
+    <form method="post" action="/mode/FULL_AUTO" class="inline"><button>FULL_AUTO</button></form>
+  </div>
+  <div class="card">
+    <h2>Controls</h2>
+    <form method="post" action="/run" class="inline"><button class="primary">Run workflow now</button></form>
+    {% if paused %}
+      <form method="post" action="/resume" class="inline"><button>Resume</button></form>
+    {% else %}
+      <form method="post" action="/pause" class="inline"><button>Pause</button></form>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>Platform status</h2>
+    <ul>
+      {% for p in platforms %}
+        <li>
+          <strong>{{ p.platform }}</strong>:
+          {{ p.status }}
+          {% if p.human_required %}<span class="badge bad">human required</span>{% endif %}
+          {% if p.last_error %}<div class="muted small">{{ p.last_error[:160] }}</div>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<h2>Today's actions</h2>
+<table class="actions">
+  <thead>
+    <tr>
+      <th>Time</th><th>Platform</th><th>Type</th><th>Topic / Target</th>
+      <th>Risk</th><th>Status</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in actions %}
+    <tr class="status-{{ a.status }}">
+      <td>{{ a.created_at.strftime('%H:%M') }}</td>
+      <td>{{ a.platform }}</td>
+      <td>{{ a.action_type }}</td>
+      <td>{{ a.topic or a.target_name or '' }}</td>
+      <td>{{ '%.0f' | format(a.risk_score) }}</td>
+      <td><span class="badge {{ a.status }}">{{ a.status }}</span></td>
+      <td><a href="/actions/{{ a.id }}">view</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="muted">No actions yet today.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Recent posts</h2>
+<ul class="posts">
+{% for p in posts %}
+  <li>
+    <strong>{{ p.platform }}</strong> — {{ p.topic }}
+    {% if p.posted_url %}— <a href="{{ p.posted_url }}" target="_blank">link</a>{% endif %}
+    <div class="muted small">{{ p.text[:200] }}{% if p.text|length > 200 %}...{% endif %}</div>
+  </li>
+{% else %}
+  <li class="muted">Nothing posted yet.</li>
+{% endfor %}
+</ul>
+{% endblock %}

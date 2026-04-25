@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Actions {% if filter_status %} — {{ filter_status }}{% endif %}</h2>
+<p class="muted">
+  Filter:
+  <a href="/actions">all</a> ·
+  <a href="/actions?status=draft">draft</a> ·
+  <a href="/actions?status=posted">posted</a> ·
+  <a href="/actions?status=blocked">blocked</a> ·
+  <a href="/actions?status=failed">failed</a> ·
+  <a href="/actions?status=human_required">human_required</a>
+</p>
+<table class="actions">
+  <thead>
+    <tr>
+      <th>Created</th><th>Platform</th><th>Type</th><th>Topic / Target</th>
+      <th>Risk</th><th>Status</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in actions %}
+    <tr class="status-{{ a.status }}">
+      <td>{{ a.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>{{ a.platform }}</td>
+      <td>{{ a.action_type }}</td>
+      <td>{{ a.topic or a.target_name or '' }}</td>
+      <td>{{ '%.0f' | format(a.risk_score) }}</td>
+      <td><span class="badge {{ a.status }}">{{ a.status }}</span></td>
+      <td><a href="/actions/{{ a.id }}">view</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="muted">No actions found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
