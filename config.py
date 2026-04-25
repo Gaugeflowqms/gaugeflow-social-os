@@ -12,7 +12,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover - fallback for minimal runtime environments
+    def load_dotenv(*_args, **_kwargs):  # type: ignore[no-redef]
+        return False
 
 ROOT_DIR = Path(__file__).resolve().parent
 STORAGE_DIR = ROOT_DIR / "storage"
