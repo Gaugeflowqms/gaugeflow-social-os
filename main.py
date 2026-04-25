@@ -9,6 +9,7 @@ Usage:
     python main.py telegram
     python main.py status
     python main.py test-meta
+    python main.py check-comments
 """
 from __future__ import annotations
 
@@ -121,6 +122,19 @@ def cmd_test_meta(_args) -> int:
     return 0
 
 
+def cmd_check_comments(_args) -> int:
+    """Run owned-post comment scan/reply flow only."""
+    from agents.ceo_controller import run_check_comments_only
+    from agents.report_writer import build_report_text
+    from connectors import telegram_bot
+
+    result = run_check_comments_only()
+    text = build_report_text(result)
+    print(text)
+    telegram_bot.send_message(text)
+    return 0
+
+
 COMMANDS = {
     "init-db": cmd_init_db,
     "dry-run": cmd_dry_run,
@@ -130,6 +144,7 @@ COMMANDS = {
     "telegram": cmd_telegram,
     "status": cmd_status,
     "test-meta": cmd_test_meta,
+    "check-comments": cmd_check_comments,
 }
 
 

@@ -176,6 +176,15 @@ This command is non-destructive. It validates Meta credential presence and
 runs read-only connector checks. If credentials are missing, it prints:
 `Meta credentials missing or incomplete`.
 
+## Check owned-post comments/replies only
+
+```bash
+python main.py check-comments
+```
+
+Runs only the owned-post comment scan + safe reply workflow step, prints a
+report, and sends the same report to Telegram when configured.
+
 ---
 
 ## Start the dashboard

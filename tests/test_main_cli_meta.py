@@ -47,6 +47,33 @@ class MainCliMetaTests(unittest.TestCase):
         self.assertIn('"facebook_check_success": true', out)
         self.assertIn('"instagram_check_success": true', out)
 
+    def test_cmd_check_comments_runs_replies_only_workflow(self) -> None:
+        workflow_result = {
+            "mode": "DRY_RUN",
+            "paused": False,
+            "posts": [],
+            "replies": [{"status": "draft"}],
+            "external_comments": [],
+            "issues": [],
+        }
+        with patch(
+            "agents.ceo_controller.run_check_comments_only",
+            return_value=workflow_result,
+        ), patch(
+            "agents.report_writer.build_report_text",
+            return_value="reply report",
+        ), patch(
+            "connectors.telegram_bot.send_message",
+        ) as mocked_send:
+            stream = io.StringIO()
+            with redirect_stdout(stream):
+                code = main.cmd_check_comments(None)
+
+        out = stream.getvalue()
+        self.assertEqual(code, 0)
+        self.assertIn("reply report", out)
+        mocked_send.assert_called_once_with("reply report")
+
 
 if __name__ == "__main__":
     unittest.main()

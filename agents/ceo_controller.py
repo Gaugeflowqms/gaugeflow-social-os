@@ -697,6 +697,38 @@ def run_draft_comments_only() -> Dict:
             "external_comments": out, "issues": []}
 
 
+def run_check_comments_only() -> Dict:
+    """Fetch comments on owned posts and run the reply flow only."""
+    mode = current_mode()
+    paused = is_paused()
+    if paused:
+        return {
+            "mode": mode,
+            "paused": True,
+            "posts": [],
+            "replies": [],
+            "external_comments": [],
+            "issues": ["paused — no actions taken"],
+        }
+
+    issues: List[str] = []
+    replies: List[Dict] = []
+    try:
+        replies = _do_replies(mode)
+    except Exception as e:
+        log.exception("replies-only step failed: %s", e)
+        issues.append(f"replies-only step failed: {e}")
+
+    return {
+        "mode": mode,
+        "paused": False,
+        "posts": [],
+        "replies": replies,
+        "external_comments": [],
+        "issues": issues,
+    }
+
+
 def get_status_text() -> str:
     mode = current_mode()
     paused = is_paused()
